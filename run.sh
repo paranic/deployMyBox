@@ -22,7 +22,7 @@ apt-get	update ; apt-get -y dist-upgrade
 #
 # Install basic packages
 #
-apt-get install -y apt-transport-https net-tools ssh sshfs git screen bzip2 curl wget rsync sudo
+apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync sudo
 
 #
 # Install Visual Studio Code
@@ -53,6 +53,31 @@ apt-get install -f -y
 wget -qO- https://deb.nodesource.com/setup_10.x | bash -
 apt-get install -y nodejs
 
+
+#
+# Install Docker CE
+#
+apt-get install gnupg2
+wget -qO- https://download.docker.com/linux/debian/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+apt-get update
+apt-get install -y docker-ce
+# Configure sysop user to use docker TODO: ask for username
+usermod -aG docker sysop
+
+#
+# Install docker-composer
+#
+wget "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -O /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+#
+# Install steam
+#
+apt-get install -y bublebee
+wget "https://repo.steampowered.com/steam/archive/precise/steam_latest.deb" -P /tmp
+dpkg -i /tmp/steam_latest.deb
+apt-get install -f -y
 
 #
 # Work In Progress...
