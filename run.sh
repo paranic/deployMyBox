@@ -72,6 +72,13 @@ wget "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-
 chmod +x /usr/local/bin/docker-compose
 
 #
+# Install MongoDB Compass Community Edition
+#
+wget "https://downloads.mongodb.com/compass/mongodb-compass-community_1.21.2_amd64.deb" -P /tmp
+dpkg -i /tmp/mongodb-compass-community_1.21.2_amd64.deb
+
+
+#
 # Install steam
 #
 apt-get install -y bublebee
