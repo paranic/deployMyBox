@@ -8,6 +8,8 @@ if [ "$(id -u)" != "0" ]; then
   exit
 fi
 
+SYSTEM_USER=sysop
+
 #
 # Remove deb-src, add contrib non-free and update system
 #
@@ -22,13 +24,29 @@ apt-get	update ; apt-get -y dist-upgrade
 #
 # Install basic packages
 #
-apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync sudo
+apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync
+
+#
+# Install and confugure sudo
+#
+apt-get install -y sudo
+echo "$SYSTEM_USER   ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+#
+# Install i3wm Window Manager
+#
+apt-get install -y i3 xorg xterm
+
+#
+# Install chromium browser
+#
+apt-get install -y chromium
 
 #
 # Install Visual Studio Code
 #
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-install -o root -g root -m 644 /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/
+apt-get install -y gnupg2
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | apt-key add -
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 apt-get update
 apt-get install -y code
@@ -36,6 +54,7 @@ apt-get install -y code
 #
 # Install Sublime Text Editor
 #
+apt-get install -y gnupg2
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add -
 echo "deb https://download.sublimetext.com/ apt/stable/" > /etc/apt/sources.list.d/sublime-text.list
 apt-get update
@@ -44,6 +63,7 @@ apt-get install -y sublime-text
 #
 # Install Skype
 #
+apt-get install -y gnupg2
 wget https://repo.skype.com/latest/skypeforlinux-64.deb -P /tmp
 dpkg -i /tmp/skypeforlinux-64.deb
 apt-get install -f -y
@@ -61,17 +81,16 @@ apt-get install -f -y
 wget -qO- https://deb.nodesource.com/setup_10.x | bash -
 apt-get install -y nodejs
 
-
 #
 # Install Docker CE
 #
-apt-get install gnupg2
+apt-get install -y gnupg2
 wget -qO- https://download.docker.com/linux/debian/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 apt-get update
 apt-get install -y docker-ce
 # Configure sysop user to use docker TODO: ask for username
-usermod -aG docker sysop
+usermod -aG docker $SYSTEM_USER
 
 #
 # Install docker-composer
@@ -85,7 +104,6 @@ chmod +x /usr/local/bin/docker-compose
 wget "https://downloads.mongodb.com/compass/mongodb-compass-community_1.21.2_amd64.deb" -P /tmp
 dpkg -i /tmp/mongodb-compass-community_1.21.2_amd64.deb
 
-
 #
 # Install steam
 #
@@ -93,6 +111,13 @@ apt-get install -y bublebee
 wget "https://repo.steampowered.com/steam/archive/precise/steam_latest.deb" -P /tmp
 dpkg -i /tmp/steam_latest.deb
 apt-get install -f -y
+
+#
+# Install php-cli & composer.phar
+#
+apt-get install -y php-cli
+wget "https://getcomposer.org/installer" -O /tmp/composer-setup.php
+php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
 
 #
 # Work In Progress...
