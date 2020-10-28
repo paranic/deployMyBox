@@ -43,6 +43,15 @@ apt-get install -y i3 xorg xterm
 apt-get install -y chromium
 
 #
+# Install Opera browser
+#
+apt-get install -y gnupg2
+wget -qO- https://deb.opera.com/archive.key | apt-key add -
+echo "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list
+apt-get update
+apt-get install -y opera-stable
+
+#
 # Install Visual Studio Code
 #
 apt-get install -y gnupg2
