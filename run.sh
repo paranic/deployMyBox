@@ -48,8 +48,7 @@ apt-get install -y chromium
 apt-get install -y gnupg2
 wget -qO- https://deb.opera.com/archive.key | apt-key add -
 echo "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list
-apt-get update
-apt-get install -y opera-stable
+apt-get update && apt-get install -y opera-stable
 
 #
 # Install Visual Studio Code
@@ -57,8 +56,7 @@ apt-get install -y opera-stable
 apt-get install -y gnupg2
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | apt-key add -
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
-apt-get update
-apt-get install -y code
+apt-get update && apt-get install -y code
 
 #
 # Install Sublime Text Editor
@@ -66,8 +64,7 @@ apt-get install -y code
 apt-get install -y gnupg2
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add -
 echo "deb https://download.sublimetext.com/ apt/stable/" > /etc/apt/sources.list.d/sublime-text.list
-apt-get update
-apt-get install -y sublime-text
+apt-get update && apt-get install -y sublime-text
 
 #
 # Install Skype
@@ -96,8 +93,7 @@ apt-get install -y nodejs
 apt-get install -y gnupg2
 wget -qO- https://download.docker.com/linux/debian/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-apt-get update
-apt-get install -y docker-ce
+apt-get update && apt-get install -y docker-ce
 # Configure sysop user to use docker TODO: ask for username
 usermod -aG docker $SYSTEM_USER
 
@@ -127,6 +123,13 @@ apt-get install -f -y
 apt-get install -y php-cli
 wget "https://getcomposer.org/installer" -O /tmp/composer-setup.php
 php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
+
+#
+# Install DBeaver
+#
+wget -qO- https://dbeaver.io/debs/dbeaver.gpg.key | apt-key add -
+echo "deb https://dbeaver.io/debs/dbeaver-ce /" > /etc/apt/sources.list.d/dbeaver.list
+apt-get update && apt-get install -y dbeaver-ce
 
 #
 # Work In Progress...
