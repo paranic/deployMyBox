@@ -38,6 +38,11 @@ echo "$SYSTEM_USER   ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 apt-get install -y i3 xorg xterm
 
 #
+# Install various wm tools
+#
+apt-get install -y alsa-utils wireless-tools feh
+
+#
 # Install chromium browser
 #
 apt-get install -y chromium
@@ -116,6 +121,9 @@ apt-get install -y bublebee
 wget "https://repo.steampowered.com/steam/archive/precise/steam_latest.deb" -P /tmp
 dpkg -i /tmp/steam_latest.deb
 apt-get install -f -y
+dpkg --add-architecture i386
+apt update && apt install -y libgl1-nvidia-glx:i386
+
 
 #
 # Install php-cli & composer.phar
