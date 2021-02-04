@@ -57,7 +57,7 @@ BACKSPACE=guess
 #
 # Install various wm tools
 #
-apt-get install -y alsa-utils wireless-tools feh
+apt-get install -y pulseaudio wireless-tools feh
 
 #
 # Install chromium browser
@@ -130,17 +130,6 @@ chmod +x /usr/local/bin/docker-compose
 #
 wget "https://downloads.mongodb.com/compass/mongodb-compass-community_1.21.2_amd64.deb" -P /tmp
 dpkg -i /tmp/mongodb-compass-community_1.21.2_amd64.deb
-
-#
-# Install steam
-#
-apt-get install -y bublebee
-wget "https://repo.steampowered.com/steam/archive/precise/steam_latest.deb" -P /tmp
-dpkg -i /tmp/steam_latest.deb
-apt-get install -f -y
-dpkg --add-architecture i386
-apt update && apt install -y libgl1-nvidia-glx:i386
-
 
 #
 # Install php-cli & composer.phar
