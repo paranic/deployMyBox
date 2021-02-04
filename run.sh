@@ -24,7 +24,7 @@ apt-get	update ; apt-get -y dist-upgrade
 #
 # Install basic packages
 #
-apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync
+apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync zsh
 
 #
 # Install and confugure sudo
@@ -36,6 +36,12 @@ echo "$SYSTEM_USER   ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # Install i3wm Window Manager
 #
 apt-get install -y i3 xorg xterm
+
+#
+# Install & configure oh-my-zsh
+#
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sed -i 's/^ZSH_THEME="robbyrussell"$/ZSH_THEME="amuse"/' ~/.zshrc
 
 #
 # Configure keyboard language
