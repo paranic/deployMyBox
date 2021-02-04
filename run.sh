@@ -38,6 +38,17 @@ echo "$SYSTEM_USER   ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 apt-get install -y i3 xorg xterm
 
 #
+# Configure keyboard language
+#
+printf -- "XKBMODEL=pc105
+XKBLAYOUT=us,gr
+XKBVARIANT=
+#XKBOPTIONS=grp:ctrls_toggle
+XKBOPTIONS=grp:alt_shift_toggle
+BACKSPACE=guess
+" > /etc/default/keyboard
+
+#
 # Install various wm tools
 #
 apt-get install -y alsa-utils wireless-tools feh
