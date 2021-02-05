@@ -55,6 +55,20 @@ BACKSPACE=guess
 " > /etc/default/keyboard
 
 #
+# Configure Xresources
+#
+printf -- "xterm*faceName: Terminus
+xterm*faceSize: 12
+xterm*renderFont: true
+
+xterm*VT100.Translations: #override \\
+  Ctrl <Key>minus: smaller-vt-font() \\\n\\
+  Ctrl <Key>plus: larger-vt-font() \\\n\\
+  Ctrl <Key>0: set-vt-font(d)
+
+" > ~/.Xresources
+
+#
 # Install various wm tools
 #
 apt-get install -y pulseaudio wireless-tools feh
