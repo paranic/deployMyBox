@@ -128,6 +128,7 @@ apt-get -y install nodejs npm
 #
 # Install composer.phar
 #
+apt-get install -y php-cli php-curl php-zip
 wget "https://getcomposer.org/installer" -O /tmp/composer-setup.php
 php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
 
