@@ -123,7 +123,7 @@ apt-get install -f -y
 #
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 apt-get update
-apt-get -y install nodejs npm
+apt-get -y install nodejs
 
 #
 # Install composer.phar
