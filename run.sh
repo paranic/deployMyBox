@@ -14,7 +14,7 @@ SYSTEM_USER=sysop
 # Remove deb-src, add contrib non-free and update system
 #
 sed -i "s/^deb-src/#&/g" /etc/apt/sources.list
-sed -i 's/^deb http:\/\/deb.debian.org\/debian\/ buster main$/deb http:\/\/deb.debian.org\/debian\/ buster main contrib non-free/' /etc/apt/sources.list
+sed -i 's/^deb http:\/\/deb.debian.org\/debian\/ bullseye main$/deb http:\/\/deb.debian.org\/debian\/ bullseye main contrib non-free/' /etc/apt/sources.list
 
 #
 # Upgrade System
@@ -24,7 +24,7 @@ apt-get	update ; apt-get -y dist-upgrade
 #
 # Install basic packages
 #
-apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync zsh
+apt-get install -y apt-transport-https software-properties-common net-tools ssh sshfs git screen bzip2 curl wget rsync zsh htop
 
 #
 # Install and confugure sudo
@@ -35,10 +35,10 @@ echo "$SYSTEM_USER   ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 #
 # Install i3wm Window Manager
 #
-apt-get install -y i3 xorg xterm
+apt-get install -y i3 xorg xterm nvidia-driver
 
 #
-# Install & configure oh-my-zsh
+# Install & configure oh-my-zsh (change default shell to zsh, and then exit to continue installation)
 #
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 sed -i 's/^ZSH_THEME="robbyrussell"$/ZSH_THEME="amuse"/' ~/.zshrc
@@ -69,12 +69,12 @@ xterm*VT100.Translations: #override \\
 " > ~/.Xresources
 
 #
-# Install various wm tools
+# Install various tools
 #
 apt-get install -y pulseaudio wireless-tools feh
 
 #
-# Install chromium browser
+# Install Chromium browser
 #
 apt-get install -y chromium
 
@@ -85,6 +85,7 @@ apt-get install -y gnupg2
 wget -qO- https://deb.opera.com/archive.key | apt-key add -
 echo "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera.list
 apt-get update && apt-get install -y opera-stable
+rm -rf /etc/apt/sources.list.d/opera.list # sorry bro
 
 #
 # Install Visual Studio Code
@@ -118,10 +119,11 @@ dpkg -i /tmp/discord.deb
 apt-get install -f -y
 
 #
-# Install nodejs 10.x
+# Install current LTS nodejs
 #
-wget -qO- https://deb.nodesource.com/setup_10.x | bash -
-apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+apt-get update
+apt-get -y install nodejs npm
 
 #
 # Install Docker CE
@@ -130,20 +132,19 @@ apt-get install -y gnupg2
 wget -qO- https://download.docker.com/linux/debian/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 apt-get update && apt-get install -y docker-ce
-# Configure sysop user to use docker TODO: ask for username
 usermod -aG docker $SYSTEM_USER
 
 #
 # Install docker-composer
 #
-wget "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -O /usr/local/bin/docker-compose
+wget "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 #
 # Install MongoDB Compass Community Edition
 #
-wget "https://downloads.mongodb.com/compass/mongodb-compass-community_1.21.2_amd64.deb" -P /tmp
-dpkg -i /tmp/mongodb-compass-community_1.21.2_amd64.deb
+wget "https://downloads.mongodb.com/compass/mongodb-compass_1.29.5_amd64.deb" -P /tmp
+dpkg -i /tmp/mongodb-compass_1.29.5_amd64.deb
 
 #
 # Install php-cli & composer.phar
@@ -158,6 +159,29 @@ php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
 wget -qO- https://dbeaver.io/debs/dbeaver.gpg.key | apt-key add -
 echo "deb https://dbeaver.io/debs/dbeaver-ce /" > /etc/apt/sources.list.d/dbeaver.list
 apt-get update && apt-get install -y dbeaver-ce
+
+#
+# Install Real VNC Viewer
+#
+wget "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.21.1109-Linux-x64.deb" -P /tmp
+dpkg -i /tmp/VNC-Viewer-6.21.1109-Linux-x64.deb
+
+#
+# Install Oracle VirtualBox
+#
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | apt-key add -
+wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add -
+echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bullseye contrib" | tee /etc/apt/sources.list.d/virtualbox.list
+apt update
+apt install -y virtualbox-6.1
+apt --fix-broken -y install
+
+#
+# Install Postman
+#
+wget "https://dl.pstmn.io/download/latest/linux64" -O /tmp/postman.tar.gz
+tar -xzf /tmp/postman.tar.gz -C /opt/
+sudo ln -s /opt/Postman/Postman /usr/local/bin/postman
 
 #
 # Work In Progress...
