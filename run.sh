@@ -121,7 +121,7 @@ apt-get install -f -y
 #
 # Install current LTS nodejs
 #
-curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 apt-get update
 apt-get -y install nodejs
 
