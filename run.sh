@@ -126,6 +126,12 @@ apt-get update
 apt-get -y install nodejs npm
 
 #
+# Install composer.phar
+#
+wget "https://getcomposer.org/installer" -O /tmp/composer-setup.php
+php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
+
+#
 # Install Docker CE
 #
 apt-get install -y gnupg2
