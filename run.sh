@@ -71,7 +71,7 @@ xterm*VT100.Translations: #override \\
 #
 # Install various tools
 #
-apt-get install -y pulseaudio wireless-tools feh
+apt-get install -y pulseaudio pavucontrol wireless-tools feh
 
 #
 # Install Chromium browser
