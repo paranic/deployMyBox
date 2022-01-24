@@ -53,7 +53,6 @@ apt-get install fonts-powerline
 # chsh -s $(which zsh)
 
 
-
 #
 # Configure keyboard language
 #
@@ -77,6 +76,12 @@ xterm*renderFont: true
 chown $SYSTEM_USER.$SYSTEM_USER /home/$SYSTEM_USER/.Xresources
 
 #
+# Configure i3wm (has bug, must run under x enviroment)
+#
+sudo -u sysop i3-config-wizard -m win
+sed -i 's/i3-sensible-terminal/xterm/' /home/$SYSTEM_USER/.config/i3/config
+
+#
 # Install various tools
 #
 apt-get install -y pulseaudio pavucontrol wireless-tools feh
@@ -90,26 +95,26 @@ apt-get install -y chromium
 # Install Opera browser
 #
 apt-get install -y gnupg2
-wget -qO- https://deb.opera.com/archive.key | tee /usr/share/keyrings/opera-archive-keyring.gpg
-echo "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free" | tee /etc/apt/sources.list.d/opera.list
-apt-get update && apt-get install -y opera-stable
+wget -qO- https://deb.opera.com/archive.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/opera-archive-keyring.gpg >/dev/null
+echo "deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free" | tee /etc/apt/sources.list.d/opera.list >/dev/null
+apt-get update ; apt-get install -y opera-stable
 rm -rf /etc/apt/sources.list.d/opera.list # sorry bro
 
 #
 # Install Visual Studio Code
 #
 apt-get install -y gnupg2
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /usr/share/keyrings/vscode-archive-keyring.gpg
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | tee /etc/apt/sources.list.d/vscode.list
-apt-get update && apt-get install -y code
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/vscode-archive-keyring.gpg >/dev/null
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | tee /etc/apt/sources.list.d/vscode.list >/dev/null
+apt-get update ; apt-get install -y code
 
 #
 # Install Sublime Text Editor
 #
 apt-get install -y gnupg2
-wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | tee /usr/share/keyrings/sublime-archive-keyring.gpg
-echo "deb https://download.sublimetext.com/ apt/stable/" | tee /etc/apt/sources.list.d/sublime-text.list
-apt-get update && apt-get install -y sublime-text
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/sublime-archive-keyring.gpg >/dev/null
+echo "deb https://download.sublimetext.com/ apt/stable/" | tee /etc/apt/sources.list.d/sublime-text.list >/dev/null
+apt-get update ; apt-get install -y sublime-text
 
 #
 # Install Skype
@@ -126,13 +131,12 @@ wget "https://discordapp.com/api/download?platform=linux&format=deb" -O /tmp/dis
 # dpkg -i /tmp/discord.deb
 # apt-get install -f -y
 dpkg-deb -x /tmp/discord.deb /tmp/unpack
-dpkg-deb --control /tmp/discord.deb
+dpkg-deb --control /tmp/discord.deb /tmp/DEBIAN
 mv /tmp/DEBIAN /tmp/unpack
 sed -i 's/libappindicator1/libayatana-appindicator3-1/' /tmp/unpack/DEBIAN/control
 dpkg -b /tmp/unpack /tmp/discord-fixed.deb
 dpkg -i /tmp/discord-fixed.deb
 apt-get install -f -y
-
 
 #
 # Install current LTS nodejs
@@ -152,9 +156,9 @@ php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
 # Install Docker CE
 #
 apt-get install -y gnupg2
-wget -qO- https://download.docker.com/linux/debian/gpg | tee /usr/share/keyrings/docker-archive-keyring.gpg
+wget -qO- https://download.docker.com/linux/debian/gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg >/dev/null
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
-apt-get update && apt-get install -y docker-ce
+apt-get update ; apt-get install -y docker-ce
 usermod -aG docker $SYSTEM_USER
 
 #
@@ -179,9 +183,9 @@ php /tmp/composer-setup.php --install-dir=/bin --filename=composer --quiet
 #
 # Install DBeaver
 #
-wget -qO- https://dbeaver.io/debs/dbeaver.gpg.key | tee /usr/share/keyrings/dbeaver-archive-keyring.gpg
-echo "deb https://dbeaver.io/debs/dbeaver-ce /" | tee /etc/apt/sources.list.d/dbeaver.list
-apt-get update && apt-get install -y dbeaver-ce
+wget -qO- https://dbeaver.io/debs/dbeaver.gpg.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/dbeaver-archive-keyring.gpg >/dev/null
+echo "deb https://dbeaver.io/debs/dbeaver-ce /" | tee /etc/apt/sources.list.d/dbeaver.list >/dev/null
+apt-get update ; apt-get install -y dbeaver-ce
 
 #
 # Install Real VNC Viewer
@@ -192,12 +196,10 @@ dpkg -i /tmp/VNC-Viewer-6.21.1109-Linux-x64.deb
 #
 # Install Oracle VirtualBox
 #
-wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | tee /usr/share/keyrings/oracle_vbox_2016-archive-keyring.gpg
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | tee /usr/share/keyrings/oracle_vbox-archive-keyring.gpg
-echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bullseye contrib" | tee /etc/apt/sources.list.d/virtualbox.list
-apt update
-apt install -y virtualbox-6.1
-apt --fix-broken -y install
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | gpg --dearmor | tee /etc/apt/trusted.gpg.d/oracle_vbox_2016-archive-keyring.gpg >/dev/null
+wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | gpg --dearmor | tee /etc/apt/trusted.gpg.d/oracle_vbox-archive-keyring.gpg >/dev/null
+echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bullseye contrib" | tee /etc/apt/sources.list.d/virtualbox.list >/dev/null
+apt-get update ; apt-get install -y virtualbox-6.1
 
 #
 # Install Postman
