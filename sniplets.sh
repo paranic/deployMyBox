@@ -3,7 +3,6 @@
 # that would become handy someday #
 ###################################
 
-
 #
 # Fix NO_PUBKEY when apt update
 #
