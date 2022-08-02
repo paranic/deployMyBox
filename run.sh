@@ -92,6 +92,14 @@ apt-get install -y pulseaudio pavucontrol wireless-tools feh
 apt-get install -y chromium
 
 #
+# Install Brave browser
+#
+apt install -y gnupg2
+wget -qO- https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/brave-browser-archive-keyring.gpg >/dev/null
+echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list >/dev/null
+apt update ; apt install -y brave-browser
+
+#
 # Install Opera browser
 #
 apt-get install -y gnupg2
@@ -128,14 +136,7 @@ apt-get install -f -y
 # Install Discord (TMPFIX: for debian 11)
 #
 wget "https://discordapp.com/api/download?platform=linux&format=deb" -O /tmp/discord.deb
-# dpkg -i /tmp/discord.deb
-# apt-get install -f -y
-dpkg-deb -x /tmp/discord.deb /tmp/unpack
-dpkg-deb --control /tmp/discord.deb /tmp/DEBIAN
-mv /tmp/DEBIAN /tmp/unpack
-sed -i 's/libappindicator1/libayatana-appindicator3-1/' /tmp/unpack/DEBIAN/control
-dpkg -b /tmp/unpack /tmp/discord-fixed.deb
-dpkg -i /tmp/discord-fixed.deb
+dpkg -i /tmp/discord.deb
 apt-get install -f -y
 
 #
